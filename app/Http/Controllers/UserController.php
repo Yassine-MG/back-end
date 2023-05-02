@@ -43,6 +43,8 @@ class UserController extends Controller
             'email'=>$request->email,
             'password'=>bcrypt($request->password),
         ]);
+        $user = User::find(Auth::id());
+        $token = $user->createToken('authToken')->accessToken;
         return response()->json(['message'=>'successfully created','status'=>200]);
     }
 
@@ -84,18 +86,29 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors(),'status'=>204]);
-        }
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors(),'status'=>204]);
+            }
 
-           if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return response()->json(['error' => 'Your email or Your password is wrong'], 401);
-        }
-        $user = User::find(Auth::id());
-        $token = $user->createToken('authToken')->accessToken;
+            if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                return response()->json(['error' => 'Your email or Your password is wrong'], 401);
+            }
+            $user = User::find(Auth::id());
+            $token = $user->createToken('authToken')->accessToken;
 
-        return response()->json(['access_token' => $token]);
+            return response()->json(['access_token' => $token]);
     }
+
+    public function logout(Request $request)
+    {
+        $user = Auth::user();
+        if ($user) {
+            $user->token()->revoke();
+        }
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+
 
     public function checkAuthStatus() {
         return response()->json([
