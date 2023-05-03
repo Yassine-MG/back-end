@@ -26,10 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::post('/auth', [UserController::class,"login"]);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/checkauth', [UserController::class, 'checkAuthStatus']);
+Route::resource('users', UserController::class);
+Route::post('/auth', [UserController::class, 'login']);
 
+// Route::group(['middleware' => 'auth.redirect'], function () {
+//     // Route::post('/register', [UserController::class, 'register']);
 
-Route::group(['middleware' => 'auth.redirect'], function () {
-    Route::post('/register', [UserController::class, 'register']);
-    Route::resource('users', UserController::class);
-    Route::post('/auth', [UserController::class, 'login']);
-});
+// });
