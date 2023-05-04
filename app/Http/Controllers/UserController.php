@@ -43,8 +43,6 @@ class UserController extends Controller
             'email'=>$request->email,
             'password'=>bcrypt($request->password),
         ]);
-        $user = User::find(Auth::id());
-        $token = $user->createToken('authToken')->accessToken;
         return response()->json(['message'=>'successfully created','status'=>200]);
     }
 
@@ -95,8 +93,7 @@ class UserController extends Controller
             }
             $user = User::find(Auth::id());
             $token = $user->createToken('authToken')->accessToken;
-
-            return response()->json(['access_token' => $token]);
+            return response()->json(['access_token' => $token,'user'=>$user]);
     }
 
     public function logout(Request $request)
