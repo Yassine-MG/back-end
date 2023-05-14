@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FreelancerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,20 +17,18 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
-
-// Route::resource('users', UserController::class);
-// Route::post('/auth', [UserController::class,"login"]);
-Route::post('/logout', [UserController::class, 'logout']);
-Route::get('/checkauth', [UserController::class, 'checkAuthStatus']);
-Route::resource('users', UserController::class);
-Route::post('/auth', [UserController::class, 'login']);
-
-// Route::group(['middleware' => 'auth.redirect'], function () {
-//     // Route::post('/register', [UserController::class, 'register']);
-
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
 // });
+Route::group(['middleware'=>['auth:sanctum']], function(){
+    Route::put('/update/{id}',[UserController::class,'update']);
+    Route::post('/freelancers',[FreelancerController::class,'store']);
+    Route::post('/logout', [UserController::class, 'logout']);
+});
+    // Route::middleware('auth')->post('/freelancers', [FreelancerController::class, 'store']);
+    Route::get('/checkauth', [UserController::class, 'checkAuthStatus']);
+    Route::post('/auth', [UserController::class, 'login']);
+    Route::post('/register', [UserController::class, 'store']);
+    Route::get('/edit/{id}', [UserController::class, 'show']);
+    Route::get('/user/{id}/freelancer', [UserController::class, 'freelancer']);
+    

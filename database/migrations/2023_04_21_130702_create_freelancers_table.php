@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('freelancers', function (Blueprint $table) {
             $table->id();
-            $table->string('first name');
-            $table->string('last name');
-            $table->string('displayed name');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('displayed_name');
             $table->text('description');
-            $table->string('languages');
-            $table->string('Occupation')->nullable();
-            $table->string('phone',30);
-            $table->string('personal website')->nullable();
-            $table->text('photo');
-            $table->string('education')->nullable();
-            $table->string('certification')->nullable();
+            $table->string('cv');
+            $table->string('occupation');
+            $table->string('skills');
+            $table->text('photo')->nullable();
+            $table->string('education');
+            $table->string('certification');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

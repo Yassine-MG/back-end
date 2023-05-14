@@ -17,7 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum("role", ["User", "Admin"])->default("User");
+            $table->string('skills')->nullable();
+            $table->text("photo")->nullable();
+            $table->text("description")->nullable();
+            $table->enum("Language", ["English", "Frensh", "Spanish", "Arabic"])->default("English");
+            $table->string("countries")->nullable();
+            $table->enum("role", ["Member", "Admin","Freelancer"])->default("Member");
             $table->enum('statut',['Active','Inactive'])->default('Active');
             $table->rememberToken();
             $table->timestamps();

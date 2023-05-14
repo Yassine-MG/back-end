@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Freelancer;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'description',
+        'skills',
+        'Language',
+        'countries',
     ];
 
     /**
@@ -41,4 +46,28 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+     /**
+     * Freelancer & the User
+     */
+    public function freelancer()
+    {
+        return $this->hasOne(Freelancer::class);
+    }
+
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class);
+    // }
+
+    // // one admin can create many members: 
+    // public function members()
+    // {
+    //     return $this->hasMany(User::class);
+    // }
+
+    // // Many users created belong to ONE admin :
+    // public function admin()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 }
