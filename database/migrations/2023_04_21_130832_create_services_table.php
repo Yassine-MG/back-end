@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->string('images');
-            $table->double('price');
+            $table->text('details')->nullable();
+            $table->text('offer_name')->nullable();
+            $table->string('images')->nullable();
+            $table->float('price',8, 2)->nullable();
             $table->string('category');
-            $table->date('delevery');
+            $table->json('skills')->nullable();
+            $table->text('delevery')->nullable();
             $table->string('tags')->nullable();
             $table->foreignId('freelancer_id')->constrained();
             $table->timestamps();

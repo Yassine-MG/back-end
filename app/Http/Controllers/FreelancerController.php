@@ -40,7 +40,8 @@ class FreelancerController extends Controller
                 'description' => 'required|string',
                 'cv' => 'required|string',
                 'occupation' => 'required|string',
-                'skills' => 'required|string',
+                'category' => 'required|string',
+                'skills' => 'required|array',
                 'education' => 'required|string',
                 'certification' => 'required|string',
             ];
@@ -56,7 +57,10 @@ class FreelancerController extends Controller
                 $freelancer->user_id = auth()->user()->id;
 
             }
-            // Save the new freelancer to the database
+              // Add the selected services to the freelancer model
+            $skills = $request->input('skills');
+            $freelancer->skills = json_encode($skills);
+            
             $freelancer->save();
             $user = Auth::user();
             $user->role = 'Freelancer';

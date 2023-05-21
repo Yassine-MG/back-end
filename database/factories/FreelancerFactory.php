@@ -24,7 +24,7 @@ class FreelancerFactory extends Factory
             'description' => fake()->text(),
             'cv' => fake()->Url(),
             'occupation' => fake()->name(),
-            'skills' => fake()->name(),
+            'category' => fake()->name(),
             'certification' => fake()->name(),
             'photo' => fake()->imageUrl(),
             'education' => fake()->name(),

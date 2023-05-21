@@ -19,7 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('cv');
             $table->string('occupation');
-            $table->string('skills');
+            $table->string('category');
+            $table->json('skills')->nullable();
             $table->text('photo')->nullable();
             $table->string('education');
             $table->string('certification');
