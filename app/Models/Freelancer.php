@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Command;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,8 +32,12 @@ class Freelancer extends Model
         return $this->belongsTo(User::class);
     }
 
-        public function service()
+    public function services()
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(Service::class, 'freelancer_id');
+    }      
+    public function command()
+    {
+        return $this->hasMany(Command::class);
     }
 }

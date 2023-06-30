@@ -17,13 +17,19 @@ return new class extends Migration
             $table->text('description');
             $table->text('details')->nullable();
             $table->text('offer_name')->nullable();
-            $table->string('images')->nullable();
+            $table->string('image1')->nullable();
+            $table->string('image2')->nullable();
+            $table->string('image3')->nullable();
+            $table->string('video')->nullable();
             $table->float('price',8, 2)->nullable();
             $table->string('category');
             $table->json('skills')->nullable();
             $table->text('delevery')->nullable();
+            $table->integer('like')->nullable();
+            $table->integer('dislike')->nullable();
             $table->string('tags')->nullable();
-            $table->foreignId('freelancer_id')->constrained();
+            $table->json('dynamic_inputs')->nullable();
+            $table->foreignId('freelancer_id')->constrained('freelancers');
             $table->timestamps();
         });
     }

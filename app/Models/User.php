@@ -54,20 +54,4 @@ class User extends Authenticatable
         return $this->hasOne(Freelancer::class);
     }
 
-    // public function comments()
-    // {
-    //     return $this->hasMany(Comment::class);
-    // }
-
-    // // one admin can create many members: 
-    // public function members()
-    // {
-    //     return $this->hasMany(User::class);
-    // }
-
-    // // Many users created belong to ONE admin :
-    // public function admin()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
 }

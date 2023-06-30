@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Freelancer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+
+
 
 class UserController extends Controller
 {
@@ -23,32 +27,49 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+
+        public function sendResetLinkEmail(Request $request)
+        {
+            $request->validate([
+                'email' => 'required|email',
+            ]);
+        
+            $response = Password::sendResetLink(
+                $request->only('email')
+            );
+        
+            if ($response === Password::RESET_LINK_SENT) {
+                return response()->json(['message' => 'Password reset email sent']);
+            } else {
+                return response()->json(['message' => 'Failed to send password reset email'], 500);
+            }
+        }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'email'=>'required|email|unique:users,email,$id',
-            'password'=>['required','confirmed','string',Password::min(8)->symbols()->numbers()],
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email,$id',
+            'password' => ['required', 'confirmed', 'string', 'min:8'],
         ]);
+    
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors(),'status'=>204]);
+            return response()->json(['errors' => $validator->errors(), 'status' => 204]);
         }
+    
         $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password), // Use Hash::make() to hash the password
         ]);
-        $response =[
-            'user'=>$user,
+    
+        $response = [
+            'user' => $user,
         ];
-        return response()->json(['message'=>'successfully created','status'=>200,$response,201]);
+    
+        return response()->json(['message' => 'successfully created', 'status' => 200, $response, 201]);
     }
 
     /**
@@ -98,7 +119,16 @@ class UserController extends Controller
     // $user = PersonalAccessToken::findToken($token)->tokenable;
     try{
         $user = PersonalAccessToken::findToken($token)->tokenable;
-        $user->fill($request->all())->save();
+        $user->fill($request->except('photo'))->save();
+
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+            $photoPath = $photo->store('profile_pictures', 'public');
+
+            $user->photo = $photoPath;
+            $user->save();
+        }
+
         return response()->json([
             'message'=>'User Updated Successfully!!',
             'user'=>$user
@@ -138,11 +168,6 @@ class UserController extends Controller
                 $token = $user->createToken('authToken')->plainTextToken;
                 return response()->json(['access_token' => $token,'user'=>$user]);
             }
-            // $user = User::find(Auth::id());
-            // $token = $user->createToken('authToken')->plainTextToken;
-            // // return response()->json(['access_token' => $token,'token_type'=>'Bearer','user'=>$user]);
-            // // $token = $user->createToken('authToken')->accessToken;
-            // return response()->json(['access_token' => $token,'user'=>$user]);
     }
 
     public function logout(Request $request)
@@ -172,4 +197,31 @@ class UserController extends Controller
     }
 
 
+    public function userInProfile($id)
+    {
+        $user = User::find($id);
+
+        if ($user) {
+            return response()->json([
+                'user' => $user,
+            ]);
+        } else {
+            return response()->json(['message' => 'User not found']);
+        }
+    }
+
+
+    public function getServices($id)
+{
+    $freelancer = Freelancer::where('user_id', $id)->first();
+
+    if ($freelancer) {
+        $services = $freelancer->services;
+        return response()->json([
+            'services' => $services,
+        ]);
+    } else {
+        return response()->json(['message' => 'Freelancer not found']);
+    }
+}
 }

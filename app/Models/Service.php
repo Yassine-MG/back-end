@@ -14,7 +14,10 @@ class Service extends Model
         'title',
         'description',
         'details',
-        'images',
+        'image1',
+        'image2',
+        'image3',
+        'video',
         'price',
         'offer_name',
         'category',
@@ -28,5 +31,4 @@ class Service extends Model
     {
         return $this->belongsTo(Freelancer::class);
     }
-    
 }
