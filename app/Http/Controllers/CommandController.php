@@ -149,4 +149,23 @@ class CommandController extends Controller
     
         return response()->json(['error' => 'No files uploaded'], 400);
     }
+
+
+
+            public function updateStatus(Request $request, $id)
+        {
+            $command = Command::findOrFail($id);
+
+            // Validate the incoming request data
+            $validatedData = $request->validate([
+                'status' => 'required|string',
+            ]);
+
+            // Update the status of the command
+            $command->status = $validatedData['status'];
+            $command->save();
+
+            // Return a response or redirect as needed
+            return response()->json(['message' => 'Status updated successfully']);
+        }
 }

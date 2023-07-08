@@ -38,6 +38,7 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('/commands', [CommandController::class, 'store']);
     Route::get('/commands/of/freelancer', [CommandController::class, 'getCommandsRelatedToFreelancerService']);
     Route::get('/commands/of/user', [CommandController::class, 'getCommandsOfCustomers']);
+    Route::put('put/status/commands/{id}', [CommandController::class, 'updateStatus']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::put('/commands/delevery/date/{command}', [CommandController::class, 'update']);
     Route::post('/commands/{id}/upload-files', [CommandController::class, 'uploadFiles']);
@@ -51,7 +52,7 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::get('/search', [ServiceController::class, 'searchServiceHomepage']);
     Route::get('/count/services/category', [ServiceController::class, 'countServicesInCategory']);
     Route::get('/services/best', [ServiceController::class, 'retrieveBestServices']);
-    Route::post('/send-password-reset-email', 'App\Http\Controllers\UserController@sendResetLinkEmail')->name('password.reset');
+    Route::post('/send/password/reset/email', [UserController::class, 'sendResetLinkEmail'])->name('password.reset');
     // Route::get('/list/services', [ServiceController::class, 'index']);
     Route::get('/service/{id}', [ServiceController::class, 'show']);
     // Route::middleware('auth')->post('/freelancers', [FreelancerController::class, 'store']);

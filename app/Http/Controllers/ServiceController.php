@@ -262,13 +262,18 @@ class ServiceController extends Controller
             }
         }
 
-
         public function deleteService($id)
         {
-            $service = Service::findOrFail($id);
-            $service->delete();
-            
-            // Optionally, you can return a response or perform any additional actions
+            try {
+                $service = Service::findOrFail($id);
+                $service->delete();
+                
+                // Optionally, you can return a success response
+                return response()->json(['message' => 'Service deleted successfully'], 200);
+            } catch (\Exception $e) {
+                // Return error response with the custom error message
+                return response()->json(['error' => 'Failed to delete the service. Please try again later.'], 500);
+            }
         }
 
 
