@@ -49,7 +49,7 @@ class ServiceFactory extends Factory
             'image2' => Storage::url($this->getRandomImageFromFolder('public/media/pictures')),
             'image3' => Storage::url($this->getRandomImageFromFolder('public/media/pictures')),
             'video' => Storage::url($this->getRandomVideoFromFolder('public/media/videos')),
-            'price' => $this->faker->randomFloat(2, 0, 999999.99),
+            'price' => $this->faker->randomFloat(2, 0, 999),
             'category' => $this->faker->randomElement($categories),
             'skills' => json_encode(['skill1', 'skill2']), // Replace ['skill1', 'skill2'] with your desired skills array
             'delevery' => $this->faker->randomElement($deliveryTimes),
